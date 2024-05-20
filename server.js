@@ -11,13 +11,11 @@ dotenv.config({ path: '.env.production.local' });
 
 const app = express();
 
-// 创建日志目录
 const logDir = 'log';
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }
 
-// 创建 logger
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -32,7 +30,6 @@ const logger = winston.createLogger({
     ],
 });
 
-// 数据库配置
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
@@ -40,7 +37,6 @@ const pool = new Pool({
     },
 });
 
-// 数据库连接检查
 async function checkDatabaseConnection() {
     try {
         const client = await pool.connect();
@@ -56,7 +52,6 @@ checkDatabaseConnection();
 
 app.use(bodyParser.json());
 
-// 使用单独的路由文件来管理路由
 app.use('/api/v1', routes(pool, logger));
 
 const PORT = process.env.PORT || 3000;

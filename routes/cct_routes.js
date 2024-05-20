@@ -13,10 +13,39 @@ module.exports = (pool, logger) => {
     }
   });
 
-  // 添加其他查询端点
   router.get('/tya51', async (req, res) => {
     try {
-      const result = await pool.query('select l.name, o.timestamp, o.value, l.nztmx, l.nztmy, o.qualitycode, o.owner from tya51_observation as o join tya51_location as l on l.locationid=l.locationid group by l.name, o.timestamp, o.value, l.nztmx, l.nztmy, o.qualitycode, o.owner order by timestamp asc ');
+      const result = await pool.query(`
+                      SELECT 
+                        l.name, 
+                        o.timestamp, 
+                        o.value, 
+                        l.nztmx, 
+                        l.nztmy, 
+                        o.qualitycode, 
+                        o.owner 
+                      FROM 
+                        tya51_observation AS o 
+                      JOIN 
+                        tya51_location AS l 
+                      ON 
+                        o.locationid = l.locationid 
+                      WHERE 
+                        o.timestamp::date = (
+                            SELECT MAX(o2.timestamp::date) 
+                            FROM tya51_observation AS o2
+                        )
+                      GROUP BY 
+                        l.name, 
+                        o.timestamp, 
+                        o.value, 
+                        l.nztmx, 
+                        l.nztmy, 
+                        o.qualitycode, 
+                        o.owner 
+                      ORDER BY 
+                        o.timestamp ASC;
+      `);
       res.json(result.rows);
     } catch (err) {
       logger.error('Error fetching data for endpoint2:', err.message);
@@ -24,8 +53,6 @@ module.exports = (pool, logger) => {
     }
   });
 
-  // 可以继续添加更多的端点
-  // ...
 
   return router;
 };
