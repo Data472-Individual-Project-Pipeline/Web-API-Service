@@ -52,7 +52,7 @@ checkDatabaseConnection();
 
 app.use(bodyParser.json());
 
-app.use('/api/v1', routes(pool, logger));
+app.use('/data472/cct/v1', routes(pool, logger));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
