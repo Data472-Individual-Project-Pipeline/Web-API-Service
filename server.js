@@ -1,4 +1,10 @@
+/**
+ * Author: Hua Wang
+ * Email: aemooooon@gmail.com
+ */
+
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
@@ -6,6 +12,7 @@ const winston = require('winston');
 const path = require('path');
 const routes = require('./routes/cct_routes');
 const fs = require('fs');
+const { swaggerUi, specs } = require('./swaggerConfig');
 
 dotenv.config({ path: '.env.production.local' });
 
@@ -50,7 +57,11 @@ async function checkDatabaseConnection() {
 
 checkDatabaseConnection();
 
+app.use(cors());
 app.use(bodyParser.json());
+
+// Swagger setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/data472/cct/v1', routes(pool, logger));
 
