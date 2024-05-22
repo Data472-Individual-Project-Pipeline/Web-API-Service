@@ -1,5 +1,5 @@
 /**
- * Author: Hua Wang
+ * Author: Aemon Wang
  * Email: aemooooon@gmail.com
  */
 
@@ -12,7 +12,7 @@ const winston = require('winston');
 const path = require('path');
 const routes = require('./routes/cct_routes');
 const fs = require('fs');
-const { swaggerUi, specs } = require('./swaggerConfig');
+const { swaggerUi, specs } = require('./config/swaggerConfig');
 
 dotenv.config({ path: '.env.production.local' });
 

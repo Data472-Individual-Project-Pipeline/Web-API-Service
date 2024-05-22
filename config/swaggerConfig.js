@@ -1,3 +1,8 @@
+/**
+ * Author: Aemon Wang
+ * Email: aemooooon@gmail.com
+ */
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
