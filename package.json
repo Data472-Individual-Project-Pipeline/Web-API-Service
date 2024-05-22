@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/Data472-Individual-Project-Pipeline/Web-API-Service/issues"
   },
-  "homepage": "https://github.com/Data472-Individual-Project-Pipeline/Web-API-Service#readme"
+  "homepage": "https://github.com/Data472-Individual-Project-Pipeline/Web-API-Service#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "winston": "^3.13.0"
+  }
 }
