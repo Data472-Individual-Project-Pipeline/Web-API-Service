@@ -7,18 +7,13 @@ const dus15Routes = require('./dus15');
 const jjm148Routes = require('./jjm148');
 const rna104Routes = require('./rna104');
 const rubenRoutes = require('./ruben');
-
-/**
- * @swagger
- * tags:
- *   name: CCT
- *   description: Web APIs Management
- */
+const are154Routes = require('./are154');
 
 module.exports = (pool, logger) => {
   const router = express.Router();
 
   // Mount each route
+  router.use(are154Routes(pool, logger));
   router.use(ownerRoutes(pool, logger));
   router.use(hpa117Routes(pool, logger));
   router.use(hwa205Routes(pool, logger));

@@ -12,11 +12,11 @@ module.exports = (pool, logger) => {
      * @swagger
      * /hpa117:
      *   get:
-     *     summary: Retrieve data from hpa117
-     *     tags: [CCT]
+     *     summary: Retrieve data from Haritha Parthiban
+     *     tags: [Haritha Parthiban]
      *     responses:
      *       200:
-     *         description: A list of data from hpa117_rainfall
+     *         description: Rainfall Data
      *         content:
      *           application/json:
      *             schema:

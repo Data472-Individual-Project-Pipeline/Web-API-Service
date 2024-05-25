@@ -7,57 +7,74 @@ const express = require('express');
 
 module.exports = (pool, logger) => {
     const router = express.Router();
+    
     /**
-   * @swagger
-   * /rna104:
-   *   get:
-   *     summary: Retrieve cycleway data with optional type filter
-   *     tags: [CCT]
-   *     parameters:
-   *       - in: query
-   *         name: type
-   *         schema:
-   *           type: string
-   *         description: The type of cycleway to filter by (default is "Cycleway")
-   *     responses:
-   *       200:
-   *         description: A list of cycleway data
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: array
-   *               items:
-   *                 type: object
-   *                 properties:
-   *                   id:
-   *                     type: integer
-   *                   servicestatus:
-   *                     type: string
-   *                   majorcyclewayname:
-   *                     type: string
-   *                   type:
-   *                     type: string
-   *                   createdate:
-   *                     type: string
-   *                     format: date-time
-   *                   lastedittdate:
-   *                     type: string
-   *                     format: date-time
-   *                   shape_length:
-   *                     type: number
-   *                     format: double
-   *                   geometrypath:
-   *                     type: string
-   *                   inserted_at:
-   *                     type: string
-   *                     format: date-time
-   *                   owner:
-   *                     type: string
-   *       500:
-   *         description: Internal server error
-   */
+     * @swagger
+     * /rna104:
+     *   get:
+     *     summary: Retrieve data from Roman Naumov
+     *     tags: [Roman Naumov]
+     *     parameters:
+     *       - in: query
+     *         name: type
+     *         schema:
+     *           type: string
+     *           enum: [Cycleway, "Shared zone", "Shared path", "Cycle lane", "Trail", "Quiet street"]
+     *           default: Cycleway
+     *         description: The type of cycleway to filter by
+     *       - in: query
+     *         name: page
+     *         schema:
+     *           type: integer
+     *           example: 1
+     *         description: The page number to retrieve (default is 1)
+     *       - in: query
+     *         name: pageSize
+     *         schema:
+     *           type: integer
+     *           example: 100
+     *         description: The number of items per page (default is 100)
+     *     responses:
+     *       200:
+     *         description: A list of cycleway data in Christchurch
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 type: object
+     *                 properties:
+     *                   id:
+     *                     type: integer
+     *                   servicestatus:
+     *                     type: string
+     *                   majorcyclewayname:
+     *                     type: string
+     *                   type:
+     *                     type: string
+     *                   createdate:
+     *                     type: string
+     *                     format: date-time
+     *                   lasteditdate:
+     *                     type: string
+     *                     format: date-time
+     *                   shape_length:
+     *                     type: number
+     *                     format: double
+     *                   geometrypath:
+     *                     type: string
+     *                   inserted_at:
+     *                     type: string
+     *                     format: date-time
+     *                   owner:
+     *                     type: string
+     *       500:
+     *         description: Internal server error
+     */
     router.get('/rna104', async (req, res) => {
-        const { type = 'Cycleway' } = req.query; // Default type to 'Cycleway' if not provided
+        const { type = 'Cycleway', page = 1, pageSize = 100 } = req.query; // Default values
+
+        const offset = (page - 1) * pageSize;
 
         let query = `
                     SELECT 
@@ -76,10 +93,11 @@ module.exports = (pool, logger) => {
                     WHERE 
                         type = $1
                     ORDER BY 
-                        createdate;
+                        createdate
+                    LIMIT $2 OFFSET $3;
                     `;
 
-        const queryParams = [type];
+        const queryParams = [type, pageSize, offset];
 
         try {
             const result = await pool.query(query, queryParams);

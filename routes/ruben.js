@@ -12,7 +12,7 @@ module.exports = (pool, logger) => {
    * /ruben:
    *   get:
    *     summary: Retrieve data from ruben
-   *     tags: [CCT]
+   *     tags: [Ruben Castaing]
    *     responses:
    *       200:
    *         description: A list of data from ruben

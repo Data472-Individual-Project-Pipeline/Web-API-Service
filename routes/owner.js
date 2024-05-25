@@ -12,11 +12,11 @@ module.exports = (pool, logger) => {
    * @swagger
    * /owner:
    *   get:
-   *     summary: Retrieve a list of owners
-   *     tags: [CCT]
+   *     summary: Retrieve students list
+   *     tags: [Student List]
    *     responses:
    *       200:
-   *         description: A list of owners
+   *         description: A list of students
    *         content:
    *           application/json:
    *             schema:
@@ -26,7 +26,7 @@ module.exports = (pool, logger) => {
    */
   router.get('/owner', async (req, res) => {
     try {
-      const result = await pool.query('SELECT * FROM owners');
+      const result = await pool.query('SELECT o.name, o.fullname, o.email FROM owners o order by name');
       res.json(result.rows);
     } catch (err) {
       logger.error('Error fetching data for endpoint1:', err.message);

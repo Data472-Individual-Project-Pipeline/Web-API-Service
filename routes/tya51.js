@@ -11,11 +11,11 @@ module.exports = (pool, logger) => {
    * @swagger
    * /tya51:
    *   get:
-   *     summary: Retrieve latest observation data for tya51
-   *     tags: [CCT]
+   *     summary: Retrieve data from Tao Yan
+   *     tags: [Tao Yan]
    *     responses:
    *       200:
-   *         description: A list of latest observation data for tya51
+   *         description: River flow observation data in Canterbury
    *         content:
    *           application/json:
    *             schema:

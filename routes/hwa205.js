@@ -12,11 +12,11 @@ module.exports = (pool, logger) => {
      * @swagger
      * /hwa205:
      *   get:
-     *     summary: Retrieve data from hua_aqi_stations
-     *     tags: [CCT]
+     *     summary: Retrieve data from Hua Wang
+     *     tags: [Hua Wang]
      *     responses:
      *       200:
-     *         description: A list of data from hua_aqi_stations
+     *         description: Canterbury Air Quality Index Data
      *         content:
      *           application/json:
      *             schema:
@@ -26,7 +26,7 @@ module.exports = (pool, logger) => {
      */
     router.get('/hwa205', async (req, res) => {
         try {
-            const result = await pool.query(`SELECT * FROM hua_aqi_stations;`);
+            const result = await pool.query(`SELECT stationcity, stationshortname, stationname, stationcode, stationlatitude as latitude, stationlongitude as longitude, monitorchannel, monitorname, monitortypecode, monitortypedescription, monitorfullname, stationlocation FROM hua_aqi_stations;`);
             res.json(result.rows);
         } catch (err) {
             logger.error('Error fetching data for hwa205:', err.message);
