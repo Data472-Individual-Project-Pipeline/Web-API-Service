@@ -13,7 +13,7 @@ module.exports = (pool, logger) => {
    * /owner:
    *   get:
    *     summary: Retrieve students list
-   *     tags: [Student List]
+   *     tags: [DATA472 24S1 Student List]
    *     responses:
    *       200:
    *         description: A list of students

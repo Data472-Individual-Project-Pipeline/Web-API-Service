@@ -7,6 +7,13 @@ const express = require('express');
 
 module.exports = (pool, logger) => {
     const router = express.Router();
+    // Swagger tags definition
+    /**
+     * @swagger
+     * tags:
+     *   - name: Anirudh Revathi
+     *     description: API endpoints for Anirudh Revathi
+     */
 
     /**
      * @swagger
