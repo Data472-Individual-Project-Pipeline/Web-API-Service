@@ -1,5 +1,5 @@
 /**
- * Author: Hua Wang
+ * Author: Aemon Wang
  * Email: aemooooon@gmail.com
  */
 
@@ -10,9 +10,9 @@ const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const winston = require('winston');
 const path = require('path');
-const routes = require('./routes/cct_routes');
+const routes = require('./routes');
 const fs = require('fs');
-const { swaggerUi, specs } = require('./swaggerConfig');
+const { swaggerUi, specs } = require('./config/swaggerConfig');
 
 dotenv.config({ path: '.env.production.local' });
 
@@ -65,7 +65,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use('/data472/cct/v1', routes(pool, logger));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     logger.info(`Server running on port ${PORT}`);
 });
