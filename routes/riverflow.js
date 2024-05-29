@@ -12,23 +12,23 @@ module.exports = (pool, logger) => {
     /**
      * @swagger
      * tags:
-     *   - name: Tao Yan
-     *     description: API endpoints for Tao Yan
+     *   - name: River flow
+     *     description: API endpoints for River flow
      */
 
     /**
      * @swagger
-     * /tya51:
+     * /riverflow:
      *   get:
-     *     summary: Retrieve data from Tao Yan
-     *     tags: [Tao Yan]
+     *     summary: Retrieve data from River flow Datasets
+     *     tags: [River flow]
      *     parameters:
      *       - in: query
      *         name: date
      *         schema:
      *           type: string
      *           format: date
-     *           example: "2024-05-26"
+     *           example: "2024-04-20"
      *         description: Optional date to filter the observations in the format YYYY-MM-DD
      *       - in: query
      *         name: limit
@@ -42,6 +42,13 @@ module.exports = (pool, logger) => {
      *           type: integer
      *           default: 0
      *         description: Offset the results for pagination
+     *       - in: query
+     *         name: owner
+     *         schema:
+     *           type: string
+     *           enum: [tya51, "hra80", "pwa115"]
+     *           default: tya51
+     *         description: owner name
      *     responses:
      *       200:
      *         description: River flow data in Canterbury
@@ -75,9 +82,9 @@ module.exports = (pool, logger) => {
      *                     type: string
      *                     description: Owner of the observation data
      */
-    router.get('/tya51', async (req, res) => {
-        const { date, limit = 100, offset = 0 } = req.query;
-        const queryDate = date || `(SELECT MAX(o2.timestamp::date) FROM tya51_observation AS o2)`;
+    router.get('/riverflow', async (req, res) => {
+        const { date, limit = 100, offset = 0, owner = 'tya51' } = req.query;
+        const queryDate = date || `(SELECT MAX(o2.timestamp::date) FROM riverflow_observation AS o2)`;
 
         try {
             const result = await pool.query(`
@@ -90,13 +97,15 @@ module.exports = (pool, logger) => {
                             o.qualitycode, 
                             o.owner 
                           FROM 
-                            tya51_observation AS o 
+                            riverflow_observation AS o 
                           JOIN 
-                            tya51_location AS l 
+                          riverflow_location AS l 
                           ON 
                             o.locationid = l.locationid 
                           WHERE 
                             o.timestamp::date = $1
+                            AND
+                            o.owner = $4
                           GROUP BY 
                             l.name, 
                             o.timestamp, 
@@ -108,7 +117,7 @@ module.exports = (pool, logger) => {
                           ORDER BY 
                             o.timestamp ASC
                           LIMIT $2 OFFSET $3
-          `, [queryDate, limit, offset]);
+          `, [queryDate, limit, offset, owner]);
             res.json(result.rows);
         } catch (err) {
             logger.error('Error fetching data for tya51:', err.message);
